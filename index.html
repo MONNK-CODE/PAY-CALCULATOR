@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pay Calculator</h1>
+        <form id="payForm">
+            <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required>
+            <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required>
+            <select id="isHoliday">
+                <option value="no">Not a Holiday</option>
+                <option value="yes">Holiday</option>
+            </select>
+            <button type="submit">Calculate</button>
+        </form>
+        <div id="results"></div>
+        <div id="summary"></div>
+        <div id="continuePrompt" class="hidden">
+            <p>Do you want to add another day?</p>
+            <button id="yesButton">Yes</button>
+            <button id="noButton">No</button>
+        </div>
+        <button id="resetButton" class="hidden">Reset All Calculations</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+body {
+  font-family: 'Outfit';
+  line-height: 1.6;
+  color: #333;
+  background-color: #cecaca;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  /* font-family: 'Outfit'; */
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+input, select, button {
+  font-family: 'Outfit';
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+#results, #summary {
+  margin-top: 2rem;
+}
+
+.day-result {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.day-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.day-content {
+  display: none;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.day-content.expanded {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+#continuePrompt {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+#continuePrompt button {
+  display: inline-block;
+  width: auto;
+  margin: 0 0.5rem;
+  padding: 8px 16px;
+}
+
+#summary {
+  background-color: #e8f4fd;
+  padding: 1rem;
+  border-radius: 4px;
+  border: 1px solid #b8daff;
+}
+
+#summary h2 {
+  color: #004085;
+  margin-top: 0;
+}
+
+#resetButton {
+  background-color: #e74c3c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+#resetButton:hover {
+  background-color: #c0392b;
+}
