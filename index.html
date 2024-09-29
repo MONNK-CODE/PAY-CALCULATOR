@@ -11,7 +11,11 @@
         <h1>Pay Calculator</h1>
         <form id="payForm">
             <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required>
+            <div id="hourlyWageError" class="error-message"></div>
             <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required>
+            <div id="hoursWorkedError" class="error-message"></div>
+            <input type="date" id="workDate" required>
+            <div id="workDateError" class="error-message"></div>
             <select id="isHoliday">
                 <option value="no">Not a Holiday</option>
                 <option value="yes">Holiday</option>
