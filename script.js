@@ -5,12 +5,10 @@ let isCalculating = false;
 
 // Function to calculate pay based on input
 function calculatePay(hourlyWage, hoursWorked, isHoliday) {
-    // Apply holiday rate if applicable
     if (isHoliday.toLowerCase() === 'yes') {
         hourlyWage += hourlyWage / 2; // 50% increase for holiday
     }
 
-    // Calculate gross pay and taxes
     let grossPay = Number((hoursWorked * hourlyWage).toFixed(2));
     let med = Number((0.0145 * grossPay).toFixed(2));      // Medicare tax
     let osadi = Number((0.062 * grossPay).toFixed(2));     // Social Security tax
@@ -36,26 +34,23 @@ function decimalToHoursMinutes(decimalHours) {
 
 // Event listener for form submission
 document.getElementById('payForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent form from submitting traditionally
+    e.preventDefault();
     if (!isCalculating) {
-        calculateDay(); // Only calculate if not already in process
+        calculateDay();
     }
 });
 
 // Main function to calculate and display results for a day
 function calculateDay() {
-    // Get input values
     const hourlyWage = parseFloat(document.getElementById('hourlyWage').value);
     let hoursWorked = document.getElementById('hoursWorked').value;
     const isHoliday = document.getElementById('isHoliday').value;
     const workDate = document.getElementById('workDate').value;
 
-    // Validate inputs
     if (!validateInputs(hourlyWage, hoursWorked, workDate)) {
-        return; // Stop if inputs are invalid
+        return;
     }
 
-    // Convert hours.minutes format to decimal if necessary
     if (hoursWorked.includes('.')) {
         const [hours, minutes] = hoursWorked.split('.').map(Number);
         hoursWorked = hours + (minutes / 60);
@@ -63,10 +58,8 @@ function calculateDay() {
         hoursWorked = parseFloat(hoursWorked);
     }
 
-    // Calculate pay
     const { grossPay, totalTax, netPay } = calculatePay(hourlyWage, hoursWorked, isHoliday);
 
-    // Store day data
     const dayData = {
         workDate,
         hoursWorked,
@@ -77,11 +70,9 @@ function calculateDay() {
     };
     days.push(dayData);
 
-    // Format date and hours for display
     const formattedDate = formatDate(workDate);
     const hoursMinutesFormat = decimalToHoursMinutes(hoursWorked);
 
-    // Create and append day result element
     const results = document.getElementById('results');
     const dayElement = document.createElement('div');
     dayElement.className = 'day-result';
@@ -100,24 +91,22 @@ function calculateDay() {
     `;
     results.appendChild(dayElement);
 
-    // Add click event for expanding/collapsing day details
     dayElement.querySelector('.day-header').addEventListener('click', function() {
+        this.classList.toggle('expanded');
         const content = this.nextElementSibling;
         content.classList.toggle('expanded');
-        this.querySelector('.expand-arrow').textContent = content.classList.contains('expanded') ? '▲' : '▼';
     });
 
     updateSummary();
     showContinuePrompt();
     showResetButton();
-    isCalculating = true; // Prevent further calculations until user confirms
+    isCalculating = true;
 }
 
 // Function to validate user inputs
 function validateInputs(hourlyWage, hoursWorked, workDate) {
     let isValid = true;
 
-    // Validate hourly wage
     if (isNaN(hourlyWage) || hourlyWage <= 0) {
         updateErrorMessage('hourlyWage', "Please enter a valid hourly wage.");
         isValid = false;
@@ -125,7 +114,6 @@ function validateInputs(hourlyWage, hoursWorked, workDate) {
         updateErrorMessage('hourlyWage', "");
     }
 
-    // Validate hours worked
     if (!/^\d+(\.\d{1,2})?$/.test(hoursWorked)) {
         updateErrorMessage('hoursWorked', "Please enter valid hours worked (e.g., 8.5 or 8.30).");
         isValid = false;
@@ -133,7 +121,6 @@ function validateInputs(hourlyWage, hoursWorked, workDate) {
         updateErrorMessage('hoursWorked', "");
     }
 
-    // Validate work date
     if (!workDate) {
         updateErrorMessage('workDate', "Please select a work date.");
         isValid = false;

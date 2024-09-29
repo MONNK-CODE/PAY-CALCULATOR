@@ -141,6 +141,33 @@ p {
   margin-bottom: 0.5rem;
 }
 
+
+
+.day-header {
+  cursor: pointer;
+  /* other styles... */
+}
+
+.day-header .expand-arrow {
+  transition: transform 0.3s ease-in-out; /* Smoother transition with ease-in-out */
+  display: inline-block; /* Ensures the rotation happens around the center */
+}
+
+.day-header.expanded .expand-arrow {
+  transform: rotate(180deg); /* Rotate arrow on expand */
+
+
+.day-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.day-content.expanded {
+  max-height: 500px; /* Adjust this value based on your content */
+  transition: max-height 0.5s ease-in;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
       color: #f0f0f0;
