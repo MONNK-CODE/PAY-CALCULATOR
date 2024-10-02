@@ -5,19 +5,15 @@ let isCalculating = false;
 
 // Function to calculate pay based on input
 function calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate) {
-    // Apply holiday rate if applicable
     if (isHoliday.toLowerCase() === 'yes') {
         hourlyWage += hourlyWage / 2; // 50% increase for holiday
     }
 
-    // Calculate gross pay
     let grossPay = Number((hoursWorked * hourlyWage).toFixed(2));
 
-    // Determine tax rate (use custom if provided, otherwise default to 12.1%)
-    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.121;
+    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.121; // Default 12.1% if no custom rate
     let totalTax = Number((grossPay * totalTaxRate).toFixed(2));
 
-    // Calculate net pay
     let netPay = Number((grossPay - totalTax).toFixed(2));
 
     return { grossPay, totalTax, netPay };
@@ -38,29 +34,26 @@ function decimalToHoursMinutes(decimalHours) {
 
 // Event listener for form submission
 document.getElementById('payForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent form from submitting traditionally
+    e.preventDefault();
     if (!isCalculating) {
-        calculateDay(); // Only calculate if not already in process
+        calculateDay();
     }
 });
 
 // Main function to calculate and display results for a day
 function calculateDay() {
-    // Get input values
     const hourlyWage = parseFloat(document.getElementById('hourlyWage').value);
     let hoursWorked = document.getElementById('hoursWorked').value;
     const isHoliday = document.getElementById('isHoliday').value;
     const workDate = document.getElementById('workDate').value;
     const customTaxRate = parseFloat(document.getElementById('customTaxRate').value) || null;
 
-    // Validate inputs
     const { isValid, errors } = validateInputs(hourlyWage, hoursWorked, workDate, customTaxRate);
     if (!isValid) {
         Object.keys(errors).forEach(key => updateErrorMessage(key, errors[key]));
         return;
     }
 
-    // Convert hours.minutes format to decimal if necessary
     if (hoursWorked.includes('.')) {
         const [hours, minutes] = hoursWorked.split('.').map(Number);
         hoursWorked = hours + (minutes / 60);
@@ -68,10 +61,8 @@ function calculateDay() {
         hoursWorked = parseFloat(hoursWorked);
     }
 
-    // Calculate pay
     const { grossPay, totalTax, netPay } = calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate);
 
-    // Store day data
     const dayData = {
         workDate,
         hoursWorked,
@@ -83,11 +74,9 @@ function calculateDay() {
     };
     days.push(dayData);
 
-    // Format date and hours for display
     const formattedDate = formatDate(workDate);
     const hoursMinutesFormat = decimalToHoursMinutes(hoursWorked);
 
-    // Create and append day result element
     const results = document.getElementById('results');
     const dayElement = document.createElement('div');
     dayElement.className = 'day-result';
@@ -107,7 +96,6 @@ function calculateDay() {
     `;
     results.appendChild(dayElement);
 
-    // Add click event for expanding/collapsing day details
     dayElement.querySelector('.day-header').addEventListener('click', function() {
         this.classList.toggle('expanded');
         const content = this.nextElementSibling;
@@ -117,7 +105,8 @@ function calculateDay() {
     updateSummary();
     showContinuePrompt();
     showUndoButton();
-    isCalculating = true; // Prevent further calculations until user confirms
+    showResetButton(); // Always show reset button after a calculation
+    isCalculating = true;
 
     // Show reminder if user tries to calculate again without answering prompt
     document.getElementById('payForm').addEventListener('submit', function(e) {
@@ -220,33 +209,38 @@ function hideUndoButton() {
     document.getElementById('undoButton').classList.add('hidden');
 }
 
+// Function to show the reset button
+function showResetButton() {
+    document.getElementById('resetButton').classList.remove('hidden');
+}
+
 // Function to undo the last calculation
 function undoLastCalculation() {
     if (days.length > 0) {
-        days.pop(); // Remove the last day from the array
+        days.pop();
         const results = document.getElementById('results');
         if (results.lastChild) {
-            results.removeChild(results.lastChild); // Remove the last day from the display
+            results.removeChild(results.lastChild);
         }
-        updateSummary(); // Update the summary after removing a day
+        updateSummary();
 
         if (days.length === 0) {
-            hideUndoButton(); // Hide the undo button if no more days to undo
+            hideUndoButton();
         }
     }
 }
 
 // Function to reset all calculations
 function resetAllCalculations() {
-    days = []; // Clear all stored days
-    document.getElementById('results').innerHTML = ''; // Clear displayed results
-    document.getElementById('summary').innerHTML = ''; // Clear summary
-    document.getElementById('payForm').classList.remove('hidden'); // Show the form
-    document.getElementById('continuePrompt').classList.add('hidden'); // Hide continue prompt
-    hideUndoButton(); // Hide undo button
-    document.getElementById('payForm').reset(); // Reset form inputs
-    isCalculating = false; // Allow new calculations
-    clearErrorMessages(); // Clear any error messages
+    days = [];
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('summary').innerHTML = '';
+    document.getElementById('payForm').classList.remove('hidden');
+    document.getElementById('continuePrompt').classList.add('hidden');
+    hideUndoButton();
+    document.getElementById('payForm').reset();
+    isCalculating = false;
+    clearErrorMessages();
 }
 
 // Function to clear all error messages
@@ -270,6 +264,7 @@ document.getElementById('yesButton').addEventListener('click', function() {
 document.getElementById('noButton').addEventListener('click', function() {
     document.getElementById('continuePrompt').classList.add('hidden');
     document.getElementById('payForm').classList.add('hidden');
+    showResetButton(); // Ensure reset button is visible
 
     // Remove the event listener that shows the reminder
     document.getElementById('payForm').removeEventListener('submit', showContinueReminder);
