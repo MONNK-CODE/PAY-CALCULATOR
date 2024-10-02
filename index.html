@@ -10,17 +10,16 @@
     <div class="container">
         <h1>Pay Calculator</h1>
         <form id="payForm">
-            <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required>
-            <div id="hourlyWageError" class="error-message"></div>
-            <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required>
-            <div id="hoursWorkedError" class="error-message"></div>
-            <input type="date" id="workDate" required>
-            <div id="workDateError" class="error-message"></div>
-            <select id="isHoliday">
+            <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required title="Enter your hourly wage">
+            <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required title="Enter hours worked in decimal format (e.g., 8.5) or hours and minutes (e.g., 8.30 for 8 hours 30 minutes)">
+            <input type="date" id="workDate" required title="Select the date of work">
+            <select id="isHoliday" title="Select whether this day was a holiday">
                 <option value="no">Not a Holiday</option>
                 <option value="yes">Holiday</option>
             </select>
+            <input type="number" id="customTaxRate" step="0.01" min="0" max="100" placeholder="Custom Tax Rate (%)" title="Enter a custom tax rate (optional). If left blank, default rates will be used.">
             <button type="submit">Calculate</button>
+            <button id="undoButton" class="hidden">Undo Last Calculation</button>
         </form>
         <div id="results"></div>
         <div id="summary"></div>
@@ -30,6 +29,23 @@
             <button id="noButton">No</button>
         </div>
         <button id="resetButton" class="hidden">Reset All Calculations</button>
+    </div>
+    <button id="helpButton">Help</button>
+    <div id="helpModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class = "howtitle">How to Use the Pay Calculator</h2>
+            <p>1. Enter your hourly wage.</p>
+            <p>2. Enter hours worked in decimal (8.5) or time format (8.30).</p>
+            <p>3. Select the work date.</p>
+            <p>4. Choose if it was a holiday.</p>
+            <p>5. (Optional) Enter a custom tax rate.</p>
+            <p>6. Click "Calculate" to see results.</p>
+            <p>7. Add multiple days as needed.</p>
+            <h3 class = "howtitle">Tax Rates</h3>
+            <p>Default tax rates: 12.6% (includes Medicare, Social Security, and State Income Tax)</p>
+            <p>You can enter a custom tax rate to override the default.</p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
