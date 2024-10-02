@@ -13,8 +13,8 @@ function calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate) {
     // Calculate gross pay
     let grossPay = Number((hoursWorked * hourlyWage).toFixed(2));
 
-    // Determine tax rate (use custom if provided, otherwise default to 12.6%)
-    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.126;
+    // Determine tax rate (use custom if provided, otherwise default to 12.1%)
+    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.121;
     let totalTax = Number((grossPay * totalTaxRate).toFixed(2));
 
     // Calculate net pay
@@ -118,6 +118,14 @@ function calculateDay() {
     showContinuePrompt();
     showUndoButton();
     isCalculating = true; // Prevent further calculations until user confirms
+
+    // Show reminder if user tries to calculate again without answering prompt
+    document.getElementById('payForm').addEventListener('submit', function(e) {
+        if (isCalculating) {
+            e.preventDefault();
+            showContinueReminder();
+        }
+    });
 }
 
 // Function to validate user inputs
@@ -184,6 +192,24 @@ function showContinuePrompt() {
     document.getElementById('continuePrompt').classList.remove('hidden');
 }
 
+// Function to show reminder to answer continue prompt
+function showContinueReminder() {
+    const reminder = document.createElement('div');
+    reminder.id = 'continueReminder';
+    reminder.textContent = 'Please choose whether to add another day or finish.';
+    reminder.style.color = 'red';
+    reminder.style.marginTop = '10px';
+    document.getElementById('continuePrompt').appendChild(reminder);
+
+    // Remove the reminder after 5 seconds
+    setTimeout(() => {
+        const reminderElement = document.getElementById('continueReminder');
+        if (reminderElement) {
+            reminderElement.remove();
+        }
+    }, 5000);
+}
+
 // Function to show the undo button
 function showUndoButton() {
     document.getElementById('undoButton').classList.remove('hidden');
@@ -235,12 +261,18 @@ document.getElementById('yesButton').addEventListener('click', function() {
     document.getElementById('payForm').reset();
     isCalculating = false;
     clearErrorMessages();
+
+    // Remove the event listener that shows the reminder
+    document.getElementById('payForm').removeEventListener('submit', showContinueReminder);
 });
 
 // Event listener for "No" button (finish calculations)
 document.getElementById('noButton').addEventListener('click', function() {
     document.getElementById('continuePrompt').classList.add('hidden');
     document.getElementById('payForm').classList.add('hidden');
+
+    // Remove the event listener that shows the reminder
+    document.getElementById('payForm').removeEventListener('submit', showContinueReminder);
 });
 
 // Event listener for reset button
@@ -266,9 +298,6 @@ window.addEventListener('click', function(event) {
         modal.style.display = 'none';
     }
 });
-
-// Set the default date to today
-// document.getElementById('workDate').valueAsDate = new Date();
 
 // Set the default date to today in the local time zone
 let today = new Date();
