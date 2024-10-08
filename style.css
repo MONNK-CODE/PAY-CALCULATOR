@@ -18,11 +18,33 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.container-main {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 h1 {
   text-align: center;
   color: #F28C28;
   margin-bottom: 1.5rem;
 }
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(242, 140, 40, 0.2);
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
 
 input, select, button {
   font-family: 'Outfit';
@@ -41,13 +63,17 @@ button {
   color: #fff;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-button:hover {
-  background-color: #FFE5B4;
+ button:hover {
+  background-color: #c2bbad;
    color: #333;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 #results, #summary {
@@ -76,7 +102,7 @@ button:hover {
   color: #FFC000;
 }
 
-.day-content {
+ .day-content {
   display: none;
   margin-top: 1rem;
   padding-top: 1rem;
@@ -85,7 +111,7 @@ button:hover {
 
 .day-content.expanded {
   display: block;
-}
+} 
 
 .hidden {
   display: none;
@@ -145,16 +171,15 @@ button:hover {
 
 .day-header {
   cursor: pointer;
-  /* other styles... */
 }
 
 .day-header .expand-arrow {
-  transition: transform 0.3s ease-in-out; /* Smoother transition with ease-in-out */
-  display: inline-block; /* Ensures the rotation happens around the center */
+  transition: transform 0.3s ease-in-out; 
+  display: inline-block; 
 }
 
 .day-header.expanded .expand-arrow {
-  transform: rotate(180deg); /* Rotate arrow on expand */
+  transform: rotate(180deg); 
 }
 
 .day-content {
@@ -164,7 +189,7 @@ button:hover {
 }
 
 .day-content.expanded {
-  max-height: 500px; /* Adjust this value based on your content */
+  max-height: 500px; 
   transition: max-height 0.5s ease-in;
 }
 
@@ -172,30 +197,38 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  position: fixed;
+  z-index: 1000; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 
+  height
+  overflow: auto
+  background-color: rgba(0, 0, 0, 0.4); 
 }
   .modal {
-  display: none; /* Hidden by default */
+  display: none; 
 }
 
 .modal-content {
   background-color: #fefefe;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Responsive width */
-  max-width: 500px; /* Maximum width */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  width: 80%; 
+  max-width: 500px; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+  margin: 0; 
+  line-height: 1.6;
+}
 
-  /* Remove margin */
-  margin: 0;
+.modal-content h2, .modal-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.modal-content p {
+  margin-bottom: 1em;
 }
 
 .close {
@@ -225,6 +258,9 @@ h1 {
   }
   .container {
       background-color: #0e0e0e;
+  }
+  .container-main {
+      background-color: #080808;
   }
 
   input, select, button {

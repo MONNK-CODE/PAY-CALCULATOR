@@ -11,7 +11,7 @@ function calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate) {
 
     let grossPay = Number((hoursWorked * hourlyWage).toFixed(2));
 
-    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.121; // Default 12.1% if no custom rate
+    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.126; // Default 12.6% if no custom rate
     let totalTax = Number((grossPay * totalTaxRate).toFixed(2));
 
     let netPay = Number((grossPay - totalTax).toFixed(2));

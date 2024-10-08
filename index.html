@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Pay Calculator</h1>
+        <header>
+            <h1>Pay Calculator</h1>
+        </header>
+        <main class="container-main">
         <form id="payForm">
             <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required title="Enter your hourly wage">
             <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required title="Enter hours worked in decimal format (e.g., 8.5) or hours and minutes (e.g., 8.30 for 8 hours 30 minutes)">
@@ -18,8 +21,8 @@
                 <option value="yes">Holiday</option>
             </select>
             <input type="number" id="customTaxRate" step="0.01" min="0" max="100" placeholder="Custom Tax Rate (%)" title="Enter a custom tax rate (optional). If left blank, default rates will be used.">
-            <button type="submit">Calculate</button>
-            <button id="undoButton" class="hidden">Undo Last Calculation</button>
+            <button type="submit" aria-label="Calculate Pay">Calculate</button>
+            <button id="undoButton" class="hidden" aria-label="Undo Last Calculation">Undo Last Calculation</button>
         </form>
         <div id="continuePrompt" class="hidden">
             <p>Do you want to add another day?</p>
@@ -30,7 +33,10 @@
         <div id="summary"></div>
         <button id="resetButton" class="hidden">Reset All Calculations</button>
     </div>
-    <button id="helpButton">Help</button>
+    </main>
+    <footer>
+        <button id="helpButton" aria-label="Help">Help</button>
+    </footer>
     <div id="helpModal" class="modal hidden">
         <div class="modal-content">
             <span class="close">&times;</span>
