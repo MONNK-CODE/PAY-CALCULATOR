@@ -1,5 +1,3 @@
-
-
 // Function to calculate pay based on input
 // function calculatePay(hourlyWage, hoursWorked, isHoliday) {
 //     if (isHoliday.toLowerCase() === 'yes') {
@@ -14,3 +12,5 @@
 
 //     return { grossPay, totalTax, netPay };
 // }
+
+
