@@ -25,19 +25,6 @@ The Pay Calculator is a comprehensive web-based tool designed to help hourly wor
 - CSS3
 - JavaScript 
 
-## Setup and Usage
-
-1. Clone the repository to your local machine.
-2. Open `index.html` in a web browser.
-3. Enter your hourly wage, hours worked, and select the date.
-4. Choose whether it was a holiday or not.
-5. Optionally enter a custom tax rate.
-6. Click "Calculate" to see the results.
-7. Continue adding more days as needed.
-8. View the summary at the bottom for total earnings.
-9. Use the undo button to remove the last calculation if needed.
-10. Click the help button for detailed usage instructions.
-
 ## Contributing
 
 Contributions, issues, and feature requests are welcome. 
