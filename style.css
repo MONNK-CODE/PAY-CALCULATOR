@@ -299,6 +299,9 @@ h1 {
   .how-title {
     color: #fffbf0;
   }
+
   
-  
+}
+.holidayMultiplier {
+  display: none;
 }

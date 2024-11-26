@@ -3,21 +3,39 @@ let days = [];
 // Flag to prevent multiple calculations before user confirms
 let isCalculating = false;
 
+document.getElementById('isHoliday').addEventListener('change', function () {
+    const holidayMultiplier = document.querySelector('.holidayMultiplier');
+    if (this.value.toLowerCase() === 'yes') {
+        holidayMultiplier.style.display = 'block';
+    } else {
+        holidayMultiplier.style.display = 'none';
+    }
+});
+
 // Function to calculate pay based on input
 function calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate) {
+    const holidayMultiplierValue = parseFloat(document.getElementById('holidayMultiplierValues').value) || 1;
+
     if (isHoliday.toLowerCase() === 'yes') {
-        hourlyWage += hourlyWage / 2; // 50% increase for holiday
+        hourlyWage *= holidayMultiplierValue; // Apply the selected multiplier
     }
 
     let grossPay = Number((hoursWorked * hourlyWage).toFixed(2));
-
-    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.126; // Default 12.6% if no custom rate
+    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.126; // Default 12.6%
     let totalTax = Number((grossPay * totalTaxRate).toFixed(2));
-
     let netPay = Number((grossPay - totalTax).toFixed(2));
 
     return { grossPay, totalTax, netPay };
 }
+function parseHoursWorked(hoursWorked) {
+    if (hoursWorked.includes('.')) {
+        const [hours, minutes] = hoursWorked.split('.').map(Number);
+        return hours + (minutes / 60);
+    }
+    return parseFloat(hoursWorked);
+}
+
+
 
 // Function to format date as "Month Day, Year" in local time zone
 function formatDate(dateStr) {
@@ -48,6 +66,7 @@ function calculateDay() {
     const workDate = document.getElementById('workDate').value;
     const customTaxRate = parseFloat(document.getElementById('customTaxRate').value) || null;
 
+
     const { isValid, errors } = validateInputs(hourlyWage, hoursWorked, workDate, customTaxRate);
     if (!isValid) {
         Object.keys(errors).forEach(key => updateErrorMessage(key, errors[key]));
@@ -60,6 +79,7 @@ function calculateDay() {
     } else {
         hoursWorked = parseFloat(hoursWorked);
     }
+    hoursWorked = parseHoursWorked(hoursWorked);
 
     const { grossPay, totalTax, netPay } = calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate);
 
@@ -239,9 +259,11 @@ function resetAllCalculations() {
     document.getElementById('continuePrompt').classList.add('hidden');
     hideUndoButton();
     document.getElementById('payForm').reset();
+    document.querySelector('.holidayMultiplier').style.display = 'none'; // Reset multiplier visibility
     isCalculating = false;
     clearErrorMessages();
 }
+
 
 // Function to clear all error messages
 function clearErrorMessages() {
