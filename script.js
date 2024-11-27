@@ -1,49 +1,80 @@
 // Array to store all calculated days
 let days = [];
+
 // Flag to prevent multiple calculations before user confirms
 let isCalculating = false;
 
+// Event listener for changes in the 'isHoliday' select element
 document.getElementById('isHoliday').addEventListener('change', function () {
     const holidayMultiplier = document.querySelector('.holidayMultiplier');
-    if (this.value.toLowerCase() === 'yes') {
-        holidayMultiplier.style.display = 'block';
+    const value = this.value.toLowerCase();
+
+    // Simplified code using if-else to show/hide the holiday multiplier
+    if (value === 'yes') {
+        holidayMultiplier.style.display = 'block'; // Show the multiplier input
     } else {
-        holidayMultiplier.style.display = 'none';
+        holidayMultiplier.style.display = 'none'; // Hide the multiplier input
     }
 });
 
-// Function to calculate pay based on input
+// Function to calculate pay based on input parameters
 function calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate) {
-    const holidayMultiplierValue = parseFloat(document.getElementById('holidayMultiplierValues').value) || 1;
+    // Get the holiday multiplier value
+    let holidayMultiplierValue = parseFloat(document.getElementById('holidayMultiplierValues').value);
 
-    if (isHoliday.toLowerCase() === 'yes') {
-        hourlyWage *= holidayMultiplierValue; // Apply the selected multiplier
+    // If the multiplier is not a valid number, default to 1
+    if (isNaN(holidayMultiplierValue)) {
+        holidayMultiplierValue = 1;
     }
 
+    // Apply holiday multiplier if it's a holiday
+    if (isHoliday.toLowerCase() === 'yes') {
+        hourlyWage *= holidayMultiplierValue; // Adjust the hourly wage
+    }
+
+    // Calculate gross pay
     let grossPay = Number((hoursWorked * hourlyWage).toFixed(2));
-    let totalTaxRate = customTaxRate ? customTaxRate / 100 : 0.126; // Default 12.6%
+
+    // Determine total tax rate
+    let totalTaxRate;
+    if (customTaxRate !== null) {
+        // Use custom tax rate if provided
+        totalTaxRate = customTaxRate / 100;
+    } else {
+        // Default tax rate is 12.6%
+        totalTaxRate = 0.126;
+    }
+
+    // Calculate total tax
     let totalTax = Number((grossPay * totalTaxRate).toFixed(2));
+
+    // Calculate net pay
     let netPay = Number((grossPay - totalTax).toFixed(2));
 
+    // Return the calculated values
     return { grossPay, totalTax, netPay };
 }
+
+// Function to parse hours worked input and convert to decimal hours
 function parseHoursWorked(hoursWorked) {
     if (hoursWorked.includes('.')) {
+        // If input contains '.', split into hours and minutes
         const [hours, minutes] = hoursWorked.split('.').map(Number);
         return hours + (minutes / 60);
     }
+    // If no '.', parse as float
     return parseFloat(hoursWorked);
 }
 
-
-
 // Function to format date as "Month Day, Year" in local time zone
 function formatDate(dateStr) {
+    // Create a Date object from the input string
     const dt = new Date(dateStr + 'T00:00:00'); // Add time to ensure date is interpreted in local time zone
+    // Format the date as "Month Day, Year"
     return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
 
-// Function to convert decimal hours to hours and minutes format
+// Function to convert decimal hours to "X hours and Y minutes" format
 function decimalToHoursMinutes(decimalHours) {
     const hours = Math.floor(decimalHours);
     const minutes = Math.round((decimalHours - hours) * 60);
@@ -52,37 +83,42 @@ function decimalToHoursMinutes(decimalHours) {
 
 // Event listener for form submission
 document.getElementById('payForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default form submission behavior
     if (!isCalculating) {
-        calculateDay();
+        calculateDay(); // Call the main calculation function
     }
 });
 
 // Main function to calculate and display results for a day
 function calculateDay() {
+    // Get input values from the form
     const hourlyWage = parseFloat(document.getElementById('hourlyWage').value);
-    let hoursWorked = document.getElementById('hoursWorked').value;
+    const hoursWorkedInput = document.getElementById('hoursWorked').value;
     const isHoliday = document.getElementById('isHoliday').value;
     const workDate = document.getElementById('workDate').value;
-    const customTaxRate = parseFloat(document.getElementById('customTaxRate').value) || null;
 
+    // Get custom tax rate
+    let customTaxRateInput = document.getElementById('customTaxRate').value;
+    let customTaxRate = null;
+    if (customTaxRateInput !== '') {
+        customTaxRate = parseFloat(customTaxRateInput);
+    }
 
-    const { isValid, errors } = validateInputs(hourlyWage, hoursWorked, workDate, customTaxRate);
+    // Validate inputs
+    const { isValid, errors } = validateInputs(hourlyWage, hoursWorkedInput, workDate, customTaxRate);
     if (!isValid) {
+        // If validation fails, display error messages
         Object.keys(errors).forEach(key => updateErrorMessage(key, errors[key]));
         return;
     }
 
-    if (hoursWorked.includes('.')) {
-        const [hours, minutes] = hoursWorked.split('.').map(Number);
-        hoursWorked = hours + (minutes / 60);
-    } else {
-        hoursWorked = parseFloat(hoursWorked);
-    }
-    hoursWorked = parseHoursWorked(hoursWorked);
+    // Parse hours worked to decimal format
+    const hoursWorked = parseHoursWorked(hoursWorkedInput);
 
+    // Calculate pay
     const { grossPay, totalTax, netPay } = calculatePay(hourlyWage, hoursWorked, isHoliday, customTaxRate);
 
+    // Store day data in an object
     const dayData = {
         workDate,
         hoursWorked,
@@ -92,15 +128,21 @@ function calculateDay() {
         netPay,
         customTaxRate
     };
+
+    // Add day data to the array
     days.push(dayData);
 
+    // Format date and hours for display
     const formattedDate = formatDate(workDate);
     const hoursMinutesFormat = decimalToHoursMinutes(hoursWorked);
 
+    // Display results on the page
     const results = document.getElementById('results');
     const dayElement = document.createElement('div');
     dayElement.className = 'day-result';
-    dayElement.innerHTML = `
+
+    // Create the inner HTML content
+    let dayContent = `
         <div class="day-header">
             <h2>${formattedDate}</h2>
             <span class="expand-arrow">▼</span>
@@ -111,21 +153,38 @@ function calculateDay() {
             <p>Gross Pay: $${grossPay.toFixed(2)}</p>
             <p>Total Tax: $${totalTax.toFixed(2)}</p>
             <p>Net Pay: $${netPay.toFixed(2)}</p>
-            ${customTaxRate ? `<p>Custom Tax Rate: ${customTaxRate}%</p>` : ''}
-        </div>
     `;
+
+    // Conditionally add custom tax rate if provided
+    if (customTaxRate !== null) {
+        dayContent += `<p>Custom Tax Rate: ${customTaxRate}%</p>`;
+    }
+
+    dayContent += `</div>`;
+    dayElement.innerHTML = dayContent;
+
     results.appendChild(dayElement);
 
+    // Add event listener to toggle day details
     dayElement.querySelector('.day-header').addEventListener('click', function() {
         this.classList.toggle('expanded');
         const content = this.nextElementSibling;
         content.classList.toggle('expanded');
     });
 
+    // Update the summary of all calculations
     updateSummary();
+
+    // Show prompt to ask if user wants to add another day
     showContinuePrompt();
+
+    // Show the undo button
     showUndoButton();
-    showResetButton(); // Always show reset button after a calculation
+
+    // Always show reset button after a calculation
+    showResetButton();
+
+    // Set isCalculating flag to true to prevent multiple calculations before user confirms
     isCalculating = true;
 
     // Show reminder if user tries to calculate again without answering prompt
@@ -142,24 +201,30 @@ function validateInputs(hourlyWage, hoursWorked, workDate, customTaxRate) {
     let isValid = true;
     let errors = {};
 
+    // Validate hourly wage
     if (isNaN(hourlyWage) || hourlyWage <= 0) {
         errors.hourlyWage = "Please enter a valid hourly wage.";
         isValid = false;
     }
 
+    // Validate hours worked (allow formats like '8.5' or '8.30')
     if (!/^\d+(\.\d{1,2})?$/.test(hoursWorked)) {
         errors.hoursWorked = "Please enter valid hours worked (e.g., 8.5 or 8.30).";
         isValid = false;
     }
 
+    // Validate work date
     if (!workDate) {
         errors.workDate = "Please select a work date.";
         isValid = false;
     }
 
-    if (customTaxRate !== null && (isNaN(customTaxRate) || customTaxRate < 0 || customTaxRate > 100)) {
-        errors.customTaxRate = "Please enter a valid tax rate between 0 and 100.";
-        isValid = false;
+    // Validate custom tax rate if provided
+    if (customTaxRate !== null) {
+        if (isNaN(customTaxRate) || customTaxRate < 0 || customTaxRate > 100) {
+            errors.customTaxRate = "Please enter a valid tax rate between 0 and 100.";
+            isValid = false;
+        }
     }
 
     return { isValid, errors };
@@ -169,12 +234,14 @@ function validateInputs(hourlyWage, hoursWorked, workDate, customTaxRate) {
 function updateErrorMessage(inputId, message) {
     let errorElement = document.getElementById(inputId + 'Error');
     if (!errorElement) {
+        // Create error message element if it doesn't exist
         errorElement = document.createElement('div');
         errorElement.id = inputId + 'Error';
         errorElement.className = 'error-message';
         const inputElement = document.getElementById(inputId);
         inputElement.parentNode.insertBefore(errorElement, inputElement.nextSibling);
     }
+    // Set the error message text
     errorElement.textContent = message;
 }
 
@@ -237,33 +304,32 @@ function showResetButton() {
 // Function to undo the last calculation
 function undoLastCalculation() {
     if (days.length > 0) {
-        days.pop();
+        days.pop(); // Remove the last day's data
         const results = document.getElementById('results');
         if (results.lastChild) {
-            results.removeChild(results.lastChild);
+            results.removeChild(results.lastChild); // Remove the last result displayed
         }
-        updateSummary();
+        updateSummary(); // Update the summary
 
         if (days.length === 0) {
-            hideUndoButton();
+            hideUndoButton(); // Hide undo button if no more days
         }
     }
 }
 
-// Function to reset all calculations
+// Function to reset all calculations and start over
 function resetAllCalculations() {
-    days = [];
-    document.getElementById('results').innerHTML = '';
-    document.getElementById('summary').innerHTML = '';
-    document.getElementById('payForm').classList.remove('hidden');
-    document.getElementById('continuePrompt').classList.add('hidden');
-    hideUndoButton();
-    document.getElementById('payForm').reset();
+    days = []; // Clear all day data
+    document.getElementById('results').innerHTML = ''; // Clear results display
+    document.getElementById('summary').innerHTML = ''; // Clear summary
+    document.getElementById('payForm').classList.remove('hidden'); // Show the form
+    document.getElementById('continuePrompt').classList.add('hidden'); // Hide continue prompt
+    hideUndoButton(); // Hide undo button
+    document.getElementById('payForm').reset(); // Reset the form inputs
     document.querySelector('.holidayMultiplier').style.display = 'none'; // Reset multiplier visibility
-    isCalculating = false;
-    clearErrorMessages();
+    isCalculating = false; // Reset calculating flag
+    clearErrorMessages(); // Clear any error messages
 }
-
 
 // Function to clear all error messages
 function clearErrorMessages() {
@@ -273,10 +339,13 @@ function clearErrorMessages() {
 
 // Event listener for "Yes" button (add another day)
 document.getElementById('yesButton').addEventListener('click', function() {
-    document.getElementById('continuePrompt').classList.add('hidden');
-    document.getElementById('payForm').reset();
-    isCalculating = false;
-    clearErrorMessages();
+    document.getElementById('continuePrompt').classList.add('hidden'); // Hide continue prompt
+    document.getElementById('payForm').reset(); // Reset the form inputs
+    isCalculating = false; // Reset calculating flag
+    clearErrorMessages(); // Clear error messages
+
+    // Hide the holiday multiplier field when starting a new calculation
+    document.querySelector('.holidayMultiplier').style.display = 'none';
 
     // Remove the event listener that shows the reminder
     document.getElementById('payForm').removeEventListener('submit', showContinueReminder);
@@ -284,8 +353,8 @@ document.getElementById('yesButton').addEventListener('click', function() {
 
 // Event listener for "No" button (finish calculations)
 document.getElementById('noButton').addEventListener('click', function() {
-    document.getElementById('continuePrompt').classList.add('hidden');
-    document.getElementById('payForm').classList.add('hidden');
+    document.getElementById('continuePrompt').classList.add('hidden'); // Hide continue prompt
+    document.getElementById('payForm').classList.add('hidden'); // Hide the form
     showResetButton(); // Ensure reset button is visible
 
     // Remove the event listener that shows the reminder
@@ -298,7 +367,7 @@ document.getElementById('resetButton').addEventListener('click', resetAllCalcula
 // Event listener for undo button
 document.getElementById('undoButton').addEventListener('click', undoLastCalculation);
 
-// Event listener for help button
+// Event listener for help button (assuming there's a help modal)
 document.getElementById('helpButton').addEventListener('click', function() {
     document.getElementById('helpModal').style.display = 'flex';
 });

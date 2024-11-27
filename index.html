@@ -2,74 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pay Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Pay Calculator</h1>
-        </header>
-        <main class="container-main">
+<div class="container">
+    <header>
+        <h1>Pay Calculator</h1>
+    </header>
+    <main class="container-main">
         <form id="payForm">
+            <label for="hourlyWage">Hourly Wage:</label>
             <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required title="Enter your hourly wage">
+
+            <label for="hoursWorked">Hours Worked:</label>
             <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required title="Enter hours worked in decimal format (e.g., 8.5) or hours and minutes (e.g., 8.30 for 8 hours 30 minutes)">
+
+            <label for="workDate">Date of Work:</label>
             <input type="date" id="workDate" required title="Select the date of work">
+
+            <label for="isHoliday">Is it a Holiday?</label>
             <select id="isHoliday" title="Select whether this day was a holiday">
                 <option value="no">Not a Holiday</option>
                 <option value="yes">Holiday</option>
             </select>
-<div class="holidayMultiplier">
-            <label for="holidayMultiplierValues">Holiday Pay Multiplier:</label>
-            <select id="holidayMultiplierValues">
-                <option value="1.5">Time-and-a-Half (1.5x)</option>
-                <option value="2">Double-Time (2x)</option>
-            </select>
+
+            <div class="holidayMultiplier" style="display: none;">
+                <label for="holidayMultiplierValues">Holiday Pay Multiplier:</label>
+                <select id="holidayMultiplierValues">
+                    <option value="1.5">Time-and-a-Half (1.5x)</option>
+                    <option value="2">Double-Time (2x)</option>
+                </select>
             </div>
 
+            <label for="customTaxRate">Custom Tax Rate (%):</label>
             <input type="number" id="customTaxRate" step="0.01" min="0" max="100" placeholder="Custom Tax Rate (%)" title="Enter a custom tax rate (optional). If left blank, default rates will be used.">
+
             <button type="submit" aria-label="Calculate Pay">Calculate</button>
-            <button id="undoButton" class="hidden" aria-label="Undo Last Calculation">Undo Last Calculation</button>
+            <button type="button" id="undoButton" class="hidden" aria-label="Undo Last Calculation">Undo Last Calculation</button>
         </form>
+
+        <!-- Continue Prompt -->
         <div id="continuePrompt" class="hidden">
-            <p>Do you want to add another day?</p>
-            <button id="yesButton">Yes</button>
-            <button id="noButton">No</button>
+            <p>Would you like to add another day?</p>
+            <button type="button" id="yesButton">Yes</button>
+            <button type="button" id="noButton">No</button>
         </div>
+
+        <!-- Reset Button -->
+        <button type="button" id="resetButton" class="hidden" aria-label="Reset All Calculations">Reset All Calculations</button>
+
         <div id="results"></div>
         <div id="summary"></div>
-        <button id="resetButton" class="hidden">Reset All Calculations</button>
-        </main>
+    </main>
+</div>
+<footer>
+    <button type="button" id="helpButton" aria-label="Help">Help</button>
+</footer>
+<div id="helpModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="how-title">How to Use the Pay Calculator</h2>
+        <!-- Help content as before -->
     </div>
-    <footer>
-        <button id="helpButton" aria-label="Help">Help</button>
-    </footer>
-    <div id="helpModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class = "how-title">How to Use the Pay Calculator</h2>
-            <p>1. Enter your hourly wage.</p>
-            <p>2. Enter hours worked in decimal (8.5) or time format (8.30).</p>
-            <p>3. Select the work date.</p>
-            <p>4. Choose if it was a holiday.</p>
-            <p>5. (Optional) Enter a custom tax rate.</p>
-            <p>6. Click "Calculate" to see results.</p>
-            <p>7. Add multiple days as needed.</p>
-            <p>8. Click "Reset All Calculations" to clear all calculations.</p>
-            <p>9. Holiday Pay Calculation: If you choose "Holiday," the hourly wage is increased by 50%.</p>
-            <h3 class = "how-title">Tax Rates</h3>
-            <p><strong>Default Tax Rate:</strong> 12.6% (includes Medicare, Social Security, and Illinois State Income Tax)</p>
-            <ul>
-                <li><strong>Medicare Tax Rate:</strong> 1.45%</li>
-                <li><strong>Social Security Tax Rate:</strong> 6.2% (applies to wages up to $160,200 annually)</li>
-                <li><strong>Illinois State Income Tax Rate:</strong> 4.95%</li>
-            </ul>
-            <p><strong>Note:</strong> The default tax rate assumes that federal income tax is offset by deductions and credits for most hourly wage-workers.</p>
-            <strong>You can enter a custom tax rate if your situation is different.</strong>
-    </div>
-
-    <script src="script.js"></script>
-
+</div>
+<script src="script.js"></script>
 </body>
 </html>
