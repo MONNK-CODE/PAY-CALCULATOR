@@ -13,10 +13,12 @@
     <main class="container-main">
         <form id="payForm">
             <label for="hourlyWage">Hourly Wage:</label>
-            <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required title="Enter your hourly wage">
+            <input type="number" id="hourlyWage" step="0.01" placeholder="Hourly Wage" required
+                   title="Enter your hourly wage">
 
             <label for="hoursWorked">Hours Worked:</label>
-            <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required title="Enter hours worked in decimal format (e.g., 8.5) or hours and minutes (e.g., 8.30 for 8 hours 30 minutes)">
+            <input type="text" id="hoursWorked" placeholder="Hours Worked (e.g., 8.5 or 8.30)" required
+                   title="Enter hours worked in decimal format (e.g., 8.5) or hours and minutes (e.g., 8.30 for 8 hours 30 minutes)">
 
             <label for="workDate">Date of Work:</label>
             <input type="date" id="workDate" required title="Select the date of work">
@@ -36,10 +38,13 @@
             </div>
 
             <label for="customTaxRate">Custom Tax Rate (%):</label>
-            <input type="number" id="customTaxRate" step="0.01" min="0" max="100" placeholder="Custom Tax Rate (%)" title="Enter a custom tax rate (optional). If left blank, default rates will be used.">
+            <input type="number" id="customTaxRate" step="0.01" min="0" max="100" placeholder="Custom Tax Rate (%)"
+                   title="Enter a custom tax rate (optional). If left blank, default rates will be used.">
 
             <button type="submit" aria-label="Calculate Pay">Calculate</button>
-            <button type="button" id="undoButton" class="hidden" aria-label="Undo Last Calculation">Undo Last Calculation</button>
+            <button type="button" id="undoButton" class="hidden" aria-label="Undo Last Calculation">Undo Last
+                Calculation
+            </button>
         </form>
 
         <!-- Continue Prompt -->
@@ -50,7 +55,9 @@
         </div>
 
         <!-- Reset Button -->
-        <button type="button" id="resetButton" class="hidden" aria-label="Reset All Calculations">Reset All Calculations</button>
+        <button type="button" id="resetButton" class="hidden" aria-label="Reset All Calculations">Reset All
+            Calculations
+        </button>
 
         <div id="results"></div>
         <div id="summary"></div>
@@ -71,15 +78,18 @@
         <p>6. Click "Calculate" to see results.</p>
         <p>7. Add multiple days as needed.</p>
         <p>8. Click "Reset All Calculations" to clear all calculations.</p>
-        <p>9. Holiday Pay Calculation: Choose between 'Time-and-a-Half (1.5x)' or 'Double-Time (2x)' based on your workplace policies.</p>
+        <p>9. Holiday Pay Calculation: Choose between 'Time-and-a-Half (1.5x)' or 'Double-Time (2x)' based on your
+            workplace policies.</p>
         <h3 class="how-title">Tax Rates</h3>
-        <p><strong>Default Tax Rate:</strong> 12.6% (includes Medicare, Social Security, and Illinois State Income Tax)</p>
+        <p><strong>Default Tax Rate:</strong> 12.6% (includes Medicare, Social Security, and Illinois State Income Tax)
+        </p>
         <ul>
             <li><strong>Medicare Tax Rate:</strong> 1.45%</li>
             <li><strong>Social Security Tax Rate:</strong> 6.2% (applies to wages up to $160,200 annually)</li>
             <li><strong>Illinois State Income Tax Rate:</strong> 4.95%</li>
         </ul>
-        <p><strong>Note:</strong> The default tax rate assumes that federal income tax is offset by deductions and credits for most hourly wage-workers.</p>
+        <p><strong>Note:</strong> The default tax rate assumes that federal income tax is offset by deductions and
+            credits for most hourly wage-workers.</p>
         <strong>You can enter a custom tax rate if your situation is different.</strong>
     </div>
 </div>
